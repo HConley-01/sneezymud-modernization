@@ -1,0 +1,251 @@
+[
+    {
+        "Id": "645d3d7a43bee07fbe6be7c2ea415c718ea4ff6b0d4bead29f78c7e057386ecd",
+        "Created": "2025-05-05T19:10:38.266076929Z",
+        "Path": "./sneezy",
+        "Args": [],
+        "State": {
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 64082,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2025-05-06T02:10:52.490336218Z",
+            "FinishedAt": "2025-05-06T02:10:52.101894666Z"
+        },
+        "Image": "sha256:666337e9311152987b546aaaeed1f05ff812f51241d01b9897efe55a8cf6b95d",
+        "ResolvConfPath": "/var/lib/docker/containers/645d3d7a43bee07fbe6be7c2ea415c718ea4ff6b0d4bead29f78c7e057386ecd/resolv.conf",
+        "HostnamePath": "/var/lib/docker/containers/645d3d7a43bee07fbe6be7c2ea415c718ea4ff6b0d4bead29f78c7e057386ecd/hostname",
+        "HostsPath": "/var/lib/docker/containers/645d3d7a43bee07fbe6be7c2ea415c718ea4ff6b0d4bead29f78c7e057386ecd/hosts",
+        "LogPath": "/var/lib/docker/containers/645d3d7a43bee07fbe6be7c2ea415c718ea4ff6b0d4bead29f78c7e057386ecd/645d3d7a43bee07fbe6be7c2ea415c718ea4ff6b0d4bead29f78c7e057386ecd-json.log",
+        "Name": "/sneezy-mud",
+        "RestartCount": 0,
+        "Driver": "overlayfs",
+        "Platform": "linux",
+        "MountLabel": "",
+        "ProcessLabel": "",
+        "AppArmorProfile": "",
+        "ExecIDs": null,
+        "HostConfig": {
+            "Binds": [
+                "/home/mint/sneezymud-dev/lib/mutable:/home/sneezy/lib/mutable:rw"
+            ],
+            "ContainerIDFile": "",
+            "LogConfig": {
+                "Type": "json-file",
+                "Config": {}
+            },
+            "NetworkMode": "sneezymud-dev_sneezy-network",
+            "PortBindings": {
+                "7900/tcp": [
+                    {
+                        "HostIp": "",
+                        "HostPort": "7900"
+                    }
+                ]
+            },
+            "RestartPolicy": {
+                "Name": "unless-stopped",
+                "MaximumRetryCount": 0
+            },
+            "AutoRemove": false,
+            "VolumeDriver": "",
+            "VolumesFrom": [],
+            "ConsoleSize": [
+                0,
+                0
+            ],
+            "CapAdd": null,
+            "CapDrop": null,
+            "CgroupnsMode": "private",
+            "Dns": [],
+            "DnsOptions": [],
+            "DnsSearch": [],
+            "ExtraHosts": null,
+            "GroupAdd": null,
+            "IpcMode": "private",
+            "Cgroup": "",
+            "Links": null,
+            "OomScoreAdj": 0,
+            "PidMode": "",
+            "Privileged": false,
+            "PublishAllPorts": false,
+            "ReadonlyRootfs": false,
+            "SecurityOpt": null,
+            "UTSMode": "",
+            "UsernsMode": "",
+            "ShmSize": 67108864,
+            "Runtime": "runc",
+            "Isolation": "",
+            "CpuShares": 0,
+            "Memory": 0,
+            "NanoCpus": 0,
+            "CgroupParent": "",
+            "BlkioWeight": 0,
+            "BlkioWeightDevice": null,
+            "BlkioDeviceReadBps": null,
+            "BlkioDeviceWriteBps": null,
+            "BlkioDeviceReadIOps": null,
+            "BlkioDeviceWriteIOps": null,
+            "CpuPeriod": 0,
+            "CpuQuota": 0,
+            "CpuRealtimePeriod": 0,
+            "CpuRealtimeRuntime": 0,
+            "CpusetCpus": "",
+            "CpusetMems": "",
+            "Devices": null,
+            "DeviceCgroupRules": null,
+            "DeviceRequests": null,
+            "MemoryReservation": 0,
+            "MemorySwap": 0,
+            "MemorySwappiness": null,
+            "OomKillDisable": null,
+            "PidsLimit": null,
+            "Ulimits": null,
+            "CpuCount": 0,
+            "CpuPercent": 0,
+            "IOMaximumIOps": 0,
+            "IOMaximumBandwidth": 0,
+            "MaskedPaths": [
+                "/proc/asound",
+                "/proc/acpi",
+                "/proc/interrupts",
+                "/proc/kcore",
+                "/proc/keys",
+                "/proc/latency_stats",
+                "/proc/timer_list",
+                "/proc/timer_stats",
+                "/proc/sched_debug",
+                "/proc/scsi",
+                "/sys/firmware",
+                "/sys/devices/virtual/powercap"
+            ],
+            "ReadonlyPaths": [
+                "/proc/bus",
+                "/proc/fs",
+                "/proc/irq",
+                "/proc/sys",
+                "/proc/sysrq-trigger"
+            ]
+        },
+        "GraphDriver": {
+            "Data": null,
+            "Name": "overlayfs"
+        },
+        "Mounts": [
+            {
+                "Type": "bind",
+                "Source": "/home/mint/sneezymud-dev/lib/mutable",
+                "Destination": "/home/sneezy/lib/mutable",
+                "Mode": "rw",
+                "RW": true,
+                "Propagation": "rprivate"
+            }
+        ],
+        "Config": {
+            "Hostname": "645d3d7a43be",
+            "Domainname": "",
+            "User": "sneezy",
+            "AttachStdin": false,
+            "AttachStdout": false,
+            "AttachStderr": false,
+            "ExposedPorts": {
+                "7900/tcp": {}
+            },
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "DEBIAN_FRONTEND=noninteractive"
+            ],
+            "Cmd": [
+                "./sneezy"
+            ],
+            "Image": "sneezymud:custom",
+            "Volumes": {
+                "/home/sneezy/lib/mutable": {}
+            },
+            "WorkingDir": "/home/sneezy/code",
+            "Entrypoint": null,
+            "OnBuild": null,
+            "Labels": {
+                "com.docker.compose.config-hash": "d9d0c6d6d8b73cb94d44a9fd9f7929dfc2a5928364628bafd49b82135683cf8b",
+                "com.docker.compose.container-number": "1",
+                "com.docker.compose.oneoff": "False",
+                "com.docker.compose.project": "sneezymud-dev",
+                "com.docker.compose.project.config_files": "docker-compose.yml",
+                "com.docker.compose.project.working_dir": "/home/mint/sneezymud-dev",
+                "com.docker.compose.service": "sneezy",
+                "com.docker.compose.version": "1.29.2",
+                "org.opencontainers.image.ref.name": "ubuntu",
+                "org.opencontainers.image.version": "20.04"
+            }
+        },
+        "NetworkSettings": {
+            "Bridge": "",
+            "SandboxID": "9be72cf065866454a3cf308f2bde227e35ea7659d672d4e7db56e46760fe1bec",
+            "SandboxKey": "/var/run/docker/netns/9be72cf06586",
+            "Ports": {
+                "7900/tcp": [
+                    {
+                        "HostIp": "0.0.0.0",
+                        "HostPort": "7900"
+                    }
+                ]
+            },
+            "HairpinMode": false,
+            "LinkLocalIPv6Address": "",
+            "LinkLocalIPv6PrefixLen": 0,
+            "SecondaryIPAddresses": null,
+            "SecondaryIPv6Addresses": null,
+            "EndpointID": "",
+            "Gateway": "",
+            "GlobalIPv6Address": "",
+            "GlobalIPv6PrefixLen": 0,
+            "IPAddress": "",
+            "IPPrefixLen": 0,
+            "IPv6Gateway": "",
+            "MacAddress": "",
+            "Networks": {
+                "sneezymud-dev_sneezy-network": {
+                    "IPAMConfig": null,
+                    "Links": null,
+                    "Aliases": [
+                        "645d3d7a43be",
+                        "sneezy"
+                    ],
+                    "MacAddress": "ee:04:a0:d4:84:57",
+                    "DriverOpts": null,
+                    "GwPriority": 0,
+                    "NetworkID": "b71680cfe4dabcd5804c350ae7cbf83505536e814e66072cd5f5143d3c30091c",
+                    "EndpointID": "fbf2fdcdbb368019a610fe9d9074194ab3bd895fc5bcdeaff7b489247104b981",
+                    "Gateway": "172.19.0.1",
+                    "IPAddress": "172.19.0.3",
+                    "IPPrefixLen": 16,
+                    "IPv6Gateway": "",
+                    "GlobalIPv6Address": "",
+                    "GlobalIPv6PrefixLen": 0,
+                    "DNSNames": [
+                        "sneezy-mud",
+                        "645d3d7a43be",
+                        "sneezy"
+                    ]
+                }
+            }
+        },
+        "ImageManifestDescriptor": {
+            "mediaType": "application/vnd.oci.image.manifest.v1+json",
+            "digest": "sha256:136ae434ded3e7de279451358a4e601d3da6a26e5f71a86d7183f0eebf8a05e2",
+            "size": 1999,
+            "platform": {
+                "architecture": "amd64",
+                "os": "linux"
+            }
+        }
+    }
+]

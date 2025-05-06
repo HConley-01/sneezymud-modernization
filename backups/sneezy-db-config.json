@@ -1,0 +1,359 @@
+[
+    {
+        "Id": "07768b34e985bd35131ff814fc7e7542c8fb21297e3882e287db1744b978867a",
+        "Created": "2025-05-05T19:10:32.139677083Z",
+        "Path": "docker-entrypoint.sh",
+        "Args": [
+            "--character-set-server=utf8mb4",
+            "--collation-server=utf8mb4_unicode_ci"
+        ],
+        "State": {
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 38615,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2025-05-06T00:26:23.970787147Z",
+            "FinishedAt": "2025-05-06T00:26:23.622283257Z",
+            "Health": {
+                "Status": "healthy",
+                "FailingStreak": 0,
+                "Log": [
+                    {
+                        "Start": "2025-05-06T02:19:06.572357938Z",
+                        "End": "2025-05-06T02:19:06.63407515Z",
+                        "ExitCode": 0,
+                        "Output": "mysqld is alive\n"
+                    },
+                    {
+                        "Start": "2025-05-06T02:19:11.635303154Z",
+                        "End": "2025-05-06T02:19:11.697386097Z",
+                        "ExitCode": 0,
+                        "Output": "mysqld is alive\n"
+                    },
+                    {
+                        "Start": "2025-05-06T02:19:16.699304441Z",
+                        "End": "2025-05-06T02:19:16.747081408Z",
+                        "ExitCode": 0,
+                        "Output": "mysqld is alive\n"
+                    },
+                    {
+                        "Start": "2025-05-06T02:19:21.748357426Z",
+                        "End": "2025-05-06T02:19:21.804620206Z",
+                        "ExitCode": 0,
+                        "Output": "mysqld is alive\n"
+                    },
+                    {
+                        "Start": "2025-05-06T02:19:26.806369869Z",
+                        "End": "2025-05-06T02:19:26.867344659Z",
+                        "ExitCode": 0,
+                        "Output": "mysqld is alive\n"
+                    }
+                ]
+            }
+        },
+        "Image": "sha256:c8bb76c7d0fd384a8a9f230c42a879be8e1052783c8007caa1320a630273b425",
+        "ResolvConfPath": "/var/lib/docker/containers/07768b34e985bd35131ff814fc7e7542c8fb21297e3882e287db1744b978867a/resolv.conf",
+        "HostnamePath": "/var/lib/docker/containers/07768b34e985bd35131ff814fc7e7542c8fb21297e3882e287db1744b978867a/hostname",
+        "HostsPath": "/var/lib/docker/containers/07768b34e985bd35131ff814fc7e7542c8fb21297e3882e287db1744b978867a/hosts",
+        "LogPath": "/var/lib/docker/containers/07768b34e985bd35131ff814fc7e7542c8fb21297e3882e287db1744b978867a/07768b34e985bd35131ff814fc7e7542c8fb21297e3882e287db1744b978867a-json.log",
+        "Name": "/sneezy-db",
+        "RestartCount": 0,
+        "Driver": "overlayfs",
+        "Platform": "linux",
+        "MountLabel": "",
+        "ProcessLabel": "",
+        "AppArmorProfile": "",
+        "ExecIDs": null,
+        "HostConfig": {
+            "Binds": [
+                "/home/mint/sneezymud-dev/_Setup-data/sql_tables:/docker-entrypoint-initdb.d/tables:rw",
+                "/home/mint/sneezymud-dev/_Setup-data/sql_data:/docker-entrypoint-initdb.d/data:rw",
+                "sneezymud-dev_db_data:/var/lib/mysql:rw",
+                "/host_mnt/home/mint/sneezymud-dev/_Setup-data/sql_views:/docker-entrypoint-initdb.d/views:rw",
+                "/host_mnt/home/mint/sneezymud-dev/_Setup-data/init:/docker-entrypoint-initdb.d/init:rw"
+            ],
+            "ContainerIDFile": "",
+            "LogConfig": {
+                "Type": "json-file",
+                "Config": {}
+            },
+            "NetworkMode": "sneezymud-dev_sneezy-network",
+            "PortBindings": {},
+            "RestartPolicy": {
+                "Name": "unless-stopped",
+                "MaximumRetryCount": 0
+            },
+            "AutoRemove": false,
+            "VolumeDriver": "",
+            "VolumesFrom": [],
+            "ConsoleSize": [
+                0,
+                0
+            ],
+            "CapAdd": null,
+            "CapDrop": null,
+            "CgroupnsMode": "private",
+            "Dns": [],
+            "DnsOptions": [],
+            "DnsSearch": [],
+            "ExtraHosts": null,
+            "GroupAdd": null,
+            "IpcMode": "private",
+            "Cgroup": "",
+            "Links": null,
+            "OomScoreAdj": 0,
+            "PidMode": "",
+            "Privileged": false,
+            "PublishAllPorts": false,
+            "ReadonlyRootfs": false,
+            "SecurityOpt": null,
+            "UTSMode": "",
+            "UsernsMode": "",
+            "ShmSize": 67108864,
+            "Runtime": "runc",
+            "Isolation": "",
+            "CpuShares": 0,
+            "Memory": 0,
+            "NanoCpus": 0,
+            "CgroupParent": "",
+            "BlkioWeight": 0,
+            "BlkioWeightDevice": null,
+            "BlkioDeviceReadBps": null,
+            "BlkioDeviceWriteBps": null,
+            "BlkioDeviceReadIOps": null,
+            "BlkioDeviceWriteIOps": null,
+            "CpuPeriod": 0,
+            "CpuQuota": 0,
+            "CpuRealtimePeriod": 0,
+            "CpuRealtimeRuntime": 0,
+            "CpusetCpus": "",
+            "CpusetMems": "",
+            "Devices": null,
+            "DeviceCgroupRules": null,
+            "DeviceRequests": null,
+            "MemoryReservation": 0,
+            "MemorySwap": 0,
+            "MemorySwappiness": null,
+            "OomKillDisable": null,
+            "PidsLimit": null,
+            "Ulimits": null,
+            "CpuCount": 0,
+            "CpuPercent": 0,
+            "IOMaximumIOps": 0,
+            "IOMaximumBandwidth": 0,
+            "MaskedPaths": [
+                "/proc/asound",
+                "/proc/acpi",
+                "/proc/interrupts",
+                "/proc/kcore",
+                "/proc/keys",
+                "/proc/latency_stats",
+                "/proc/timer_list",
+                "/proc/timer_stats",
+                "/proc/sched_debug",
+                "/proc/scsi",
+                "/sys/firmware",
+                "/sys/devices/virtual/powercap"
+            ],
+            "ReadonlyPaths": [
+                "/proc/bus",
+                "/proc/fs",
+                "/proc/irq",
+                "/proc/sys",
+                "/proc/sysrq-trigger"
+            ]
+        },
+        "GraphDriver": {
+            "Data": null,
+            "Name": "overlayfs"
+        },
+        "Mounts": [
+            {
+                "Type": "bind",
+                "Source": "/home/mint/sneezymud-dev/_Setup-data/sql_data",
+                "Destination": "/docker-entrypoint-initdb.d/data",
+                "Mode": "rw",
+                "RW": true,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/host_mnt/home/mint/sneezymud-dev/_Setup-data/init",
+                "Destination": "/docker-entrypoint-initdb.d/init",
+                "Mode": "rw",
+                "RW": true,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/mint/sneezymud-dev/_Setup-data/sql_tables",
+                "Destination": "/docker-entrypoint-initdb.d/tables",
+                "Mode": "rw",
+                "RW": true,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/host_mnt/home/mint/sneezymud-dev/_Setup-data/sql_views",
+                "Destination": "/docker-entrypoint-initdb.d/views",
+                "Mode": "rw",
+                "RW": true,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "volume",
+                "Name": "sneezymud-dev_db_data",
+                "Source": "/var/lib/docker/volumes/sneezymud-dev_db_data/_data",
+                "Destination": "/var/lib/mysql",
+                "Driver": "local",
+                "Mode": "rw",
+                "RW": true,
+                "Propagation": ""
+            }
+        ],
+        "Config": {
+            "Hostname": "07768b34e985",
+            "Domainname": "",
+            "User": "",
+            "AttachStdin": false,
+            "AttachStdout": false,
+            "AttachStderr": false,
+            "ExposedPorts": {
+                "3306/tcp": {}
+            },
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "MYSQL_ALLOW_EMPTY_PASSWORD=yes",
+                "MYSQL_DATABASE=sneezy",
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "GOSU_VERSION=1.17",
+                "LANG=C.UTF-8",
+                "MARIADB_MAJOR=10.5",
+                "MARIADB_VERSION=1:10.5.28+maria~ubu2004"
+            ],
+            "Cmd": [
+                "--character-set-server=utf8mb4",
+                "--collation-server=utf8mb4_unicode_ci"
+            ],
+            "Healthcheck": {
+                "Test": [
+                    "CMD",
+                    "mysqladmin",
+                    "ping",
+                    "-h",
+                    "localhost"
+                ],
+                "Interval": 5000000000,
+                "Timeout": 5000000000,
+                "Retries": 10
+            },
+            "Image": "mariadb:10.5",
+            "Volumes": {
+                "/docker-entrypoint-initdb.d/data": {},
+                "/docker-entrypoint-initdb.d/init": {},
+                "/docker-entrypoint-initdb.d/tables": {},
+                "/docker-entrypoint-initdb.d/views": {},
+                "/var/lib/mysql": {}
+            },
+            "WorkingDir": "",
+            "Entrypoint": [
+                "docker-entrypoint.sh"
+            ],
+            "OnBuild": null,
+            "Labels": {
+                "com.docker.compose.config-hash": "ddb3a151d0dfdc7215877f891f036a11cd0f1414d0f807dcbaf52eec61057c6b",
+                "com.docker.compose.container-number": "1",
+                "com.docker.compose.oneoff": "False",
+                "com.docker.compose.project": "sneezymud-dev",
+                "com.docker.compose.project.config_files": "docker-compose.yml",
+                "com.docker.compose.project.working_dir": "/home/mint/sneezymud-dev",
+                "com.docker.compose.service": "db",
+                "com.docker.compose.version": "1.29.2",
+                "org.opencontainers.image.authors": "MariaDB Community",
+                "org.opencontainers.image.base.name": "docker.io/library/ubuntu:focal",
+                "org.opencontainers.image.description": "MariaDB Database for relational SQL",
+                "org.opencontainers.image.documentation": "https://hub.docker.com/_/mariadb/",
+                "org.opencontainers.image.licenses": "GPL-2.0",
+                "org.opencontainers.image.ref.name": "ubuntu",
+                "org.opencontainers.image.source": "https://github.com/MariaDB/mariadb-docker",
+                "org.opencontainers.image.title": "MariaDB Database",
+                "org.opencontainers.image.url": "https://github.com/MariaDB/mariadb-docker",
+                "org.opencontainers.image.vendor": "MariaDB Community",
+                "org.opencontainers.image.version": "10.5.28"
+            }
+        },
+        "NetworkSettings": {
+            "Bridge": "",
+            "SandboxID": "897bc507063c6673f36ad03b0d1266a35749460dc81d5ce4c1fcf0042722c21c",
+            "SandboxKey": "/var/run/docker/netns/897bc507063c",
+            "Ports": {
+                "3306/tcp": null
+            },
+            "HairpinMode": false,
+            "LinkLocalIPv6Address": "",
+            "LinkLocalIPv6PrefixLen": 0,
+            "SecondaryIPAddresses": null,
+            "SecondaryIPv6Addresses": null,
+            "EndpointID": "",
+            "Gateway": "",
+            "GlobalIPv6Address": "",
+            "GlobalIPv6PrefixLen": 0,
+            "IPAddress": "",
+            "IPPrefixLen": 0,
+            "IPv6Gateway": "",
+            "MacAddress": "",
+            "Networks": {
+                "sneezymud-dev_sneezy-network": {
+                    "IPAMConfig": null,
+                    "Links": null,
+                    "Aliases": [
+                        "db",
+                        "07768b34e985"
+                    ],
+                    "MacAddress": "22:94:ee:07:74:03",
+                    "DriverOpts": null,
+                    "GwPriority": 0,
+                    "NetworkID": "b71680cfe4dabcd5804c350ae7cbf83505536e814e66072cd5f5143d3c30091c",
+                    "EndpointID": "f51db1e8a076e6383929e1d9f0220d24558ca75539c9b8f638c341867d8af81a",
+                    "Gateway": "172.19.0.1",
+                    "IPAddress": "172.19.0.2",
+                    "IPPrefixLen": 16,
+                    "IPv6Gateway": "",
+                    "GlobalIPv6Address": "",
+                    "GlobalIPv6PrefixLen": 0,
+                    "DNSNames": [
+                        "sneezy-db",
+                        "db",
+                        "07768b34e985"
+                    ]
+                }
+            }
+        },
+        "ImageManifestDescriptor": {
+            "mediaType": "application/vnd.oci.image.manifest.v1+json",
+            "digest": "sha256:076632a887270d605f8bd380e28d2b7e6af5496957a7f1d334797fef3ab16a6b",
+            "size": 2479,
+            "annotations": {
+                "com.docker.official-images.bashbrew.arch": "amd64",
+                "org.opencontainers.image.base.digest": "sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a",
+                "org.opencontainers.image.base.name": "ubuntu:focal",
+                "org.opencontainers.image.created": "2025-04-09T01:18:33Z",
+                "org.opencontainers.image.revision": "3bfeae408bde492aad0444cbb13d55a70ceec6e5",
+                "org.opencontainers.image.source": "https://github.com/MariaDB/mariadb-docker.git#3bfeae408bde492aad0444cbb13d55a70ceec6e5:10.5",
+                "org.opencontainers.image.url": "https://hub.docker.com/_/mariadb",
+                "org.opencontainers.image.version": "10.5.28-focal"
+            },
+            "platform": {
+                "architecture": "amd64",
+                "os": "linux"
+            }
+        }
+    }
+]

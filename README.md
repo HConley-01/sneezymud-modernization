@@ -225,3 +225,26 @@ be applied to a fresh installation.
 
 **Note:** there is currently no provision for migrating the _contents_ of
 the databases, such as edits to room descriptions.
+
+## Database Setup and Backup
+
+SneezyMUD uses two databases:
+
+1. **sneezy** - The main database containing game data
+2. **immortal** - A separate database for immortal (admin) data
+
+### Database Documentation
+
+Detailed documentation for database setup and management is available in the following files:
+
+- [Database Setup Guide](docs/database/setup.md) - Instructions for setting up and troubleshooting the SneezyMUD database
+- [Database Backup and Restore Guide](docs/database/backup.md) - Instructions for backing up and restoring the SneezyMUD database
+
+### Backup Scripts
+
+Scripts for backing up and restoring the database are available in the `backups` directory:
+
+- [create_backup.sh](backups/create_backup.sh) - Creates timestamped backups of the databases and container configurations
+- [restore_databases.sh](backups/restore_databases.sh) - Restores the databases from backup files
+
+For more information, see the [Backup README](backups/README.md).

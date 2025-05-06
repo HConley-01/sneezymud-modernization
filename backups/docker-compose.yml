@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+  db:
+    image: mariadb:10.5
+    container_name: sneezy-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+      MYSQL_DATABASE: sneezy
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./_Setup-data/init:/docker-entrypoint-initdb.d/init
+      - ./_Setup-data/sql_tables:/docker-entrypoint-initdb.d/tables
+      - ./_Setup-data/sql_views:/docker-entrypoint-initdb.d/views
+      - ./_Setup-data/sql_data:/docker-entrypoint-initdb.d/data
+    networks:
+      - sneezy-network
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  sneezy:
+    image: sneezymud:custom
+    container_name: sneezy-mud
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "7900:7900"
+    volumes:
+      - ./lib/mutable:/home/sneezy/lib/mutable
+    networks:
+      - sneezy-network
+
+networks:
+  sneezy-network:
+    driver: bridge
+
+volumes:
+  db_data:
