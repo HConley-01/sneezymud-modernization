@@ -1,0 +1,40 @@
+Light/Shadow Effects System
+
+The light/shadow effects system provides a way to create glowing and shadowy objects
+in SneezyMUD. This system affects both visibility and light levels in the game.
+
+CREATING OBJECTS WITH LIGHT EFFECTS:
+
+When creating objects, you can use the following flags:
+- glow: Makes an object emit light (positive light value)
+- shadowy: Makes an object absorb light (negative light value)
+
+Examples:
+  @create sword magical glow
+  @create dagger magical shadowy
+
+LIGHT EFFECT PROPERTIES:
+
+1. Glowing Objects (positive light value):
+   - Are more visible (decreased canBeSeen value)
+   - Contribute light to the environment
+   - Have the ITEM_GLOW flag set
+
+2. Shadowy Objects (negative light value):
+   - Are less visible (increased canBeSeen value)
+   - Absorb light from the environment
+   - Have the ITEM_SHADOWY flag set
+
+3. Normal Objects (zero light value):
+   - Have normal visibility
+   - Do not affect light levels
+   - Have neither ITEM_GLOW nor ITEM_SHADOWY flags set
+
+NOTES:
+
+- Objects cannot have both glow and shadow effects simultaneously.
+- The light effect value is calculated based on the object's volume.
+- Larger objects have stronger light/shadow effects.
+- The light effect can be viewed using the @stat command.
+
+See Also: OBJECT PROCS, GLOWING CUTLASS

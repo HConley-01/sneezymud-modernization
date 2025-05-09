@@ -600,6 +600,9 @@ enum cmdTypeT {
   CMD_NOP,
   CMD_AURA,
   CMD_PRAYERS,
+  CMD_SET_LIGHT,
+  CMD_SET_SHADOW,
+  CMD_CLEAR_LIGHT,
   MAX_CMD_LIST,  // Keep this as last command in regular list
   CMD_RESP_TOGGLE,
   CMD_RESP_UNTOGGLE,

@@ -1,0 +1,30 @@
+Light/Shadow Effects System
+
+The light/shadow effects system provides a more elegant and consistent way to handle 
+glowing and shadowy objects in SneezyMUD. It replaces the old approach of using affect 
+slots for light effects with a dedicated property in the TObj class.
+
+COMMANDS:
+
+@set light <object> <value>
+  Sets a positive light (glow) effect on an object.
+  The value must be positive.
+  Example: @set light sword 3
+
+@set shadow <object> <value>
+  Sets a negative light (shadow) effect on an object.
+  The value will be converted to negative if positive.
+  Example: @set shadow dagger 2
+
+@clear light <object>
+  Clears any light or shadow effect from an object.
+  Example: @clear light sword
+
+NOTES:
+
+- Glowing objects (positive light value) are more visible and contribute light to the environment.
+- Shadowy objects (negative light value) are less visible and absorb light from the environment.
+- Objects cannot have both glow and shadow effects simultaneously. Setting one will remove the other.
+- The light effect value is displayed in the @stat output for objects.
+
+See Also: @SET, @STAT, OBJECT PROCS

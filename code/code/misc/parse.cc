@@ -1829,6 +1829,15 @@ int TBeing::doCommand(cmdTypeT cmd, const sstring& argument, TThing* vict,
           doAura(newarg);
           break;
 
+        // Light/Shadow effect commands
+        case CMD_SET_LIGHT:
+          doSetLight(newarg.c_str());
+          break;
+        case CMD_SET_SHADOW:
+          doSetShadow(newarg.c_str());
+          break;
+        case CMD_CLEAR_LIGHT:
+          doClearLight(newarg.c_str());
           break;
         case MAX_CMD_LIST:
         case CMD_RESP_TOGGLE:
@@ -3119,6 +3128,11 @@ void buildCommandArray(void) {
     new commandInfo("recharge", POSITION_STANDING, 0);
   commandArray[CMD_NOP] = new commandInfo("noop", POSITION_DEAD, 0);
   commandArray[CMD_AURA] = new commandInfo("aura", POSITION_RESTING, 0);
+
+  // Light/Shadow effect commands
+  commandArray[CMD_SET_LIGHT] = new commandInfo("@set light", POSITION_DEAD, GOD_LEVEL1);
+  commandArray[CMD_SET_SHADOW] = new commandInfo("@set shadow", POSITION_DEAD, GOD_LEVEL1);
+  commandArray[CMD_CLEAR_LIGHT] = new commandInfo("@clear light", POSITION_DEAD, GOD_LEVEL1);
   commandArray[CMD_FOCUS_ATTACK] =
     new commandInfo("focus", POSITION_FIGHTING, 0);
 }

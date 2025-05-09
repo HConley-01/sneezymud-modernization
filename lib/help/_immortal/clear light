@@ -1,0 +1,13 @@
+@clear light
+
+Syntax: @clear light <object>
+
+This command clears any light or shadow effect from an object. It removes both
+the ITEM_GLOW and ITEM_SHADOWY flags and resets the light effect value to zero.
+
+Example:
+  @clear light sword
+
+This command is restricted to immortals with POWER_OBJECTS.
+
+See Also: LIGHT EFFECTS, @SET
