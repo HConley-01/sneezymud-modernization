@@ -27,8 +27,8 @@ int tweakInfoT::loadTweaks() {
     tweaks[i] = new tweakEntry();
   }
 
-  // loadrate works well at 112.5
-  tweaks[TWEAK_LOADRATE]->current = tweaks[TWEAK_LOADRATE]->target = 112.5;
+  // loadrate works well at 1.125
+  tweaks[TWEAK_LOADRATE]->current = tweaks[TWEAK_LOADRATE]->target = 1.125;
 
   // the globaltweaks table contains multiple rows per tweak type
   // We only want to keep the last tweak update of each tweak type in memory, so

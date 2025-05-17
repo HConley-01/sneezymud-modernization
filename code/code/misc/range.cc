@@ -137,6 +137,7 @@ int TThing::throwMe(TBeing* ch, dirTypeT tdir, const char* vict) {
   ch->learnFromDoingUnusual(LEARN_UNUSUAL_NORM_LEARN, SKILL_RANGED_PROF, 15);
 
   strncpy(local_vict, vict, sizeof(local_vict) - 1);
+  local_vict[sizeof(local_vict) - 1] = '\0';
 
   if (sstring(local_vict).isNumber() && (sscanf(local_vict, "%d", &iDist) == 1))
     *local_vict = '\0';
@@ -900,7 +901,8 @@ TBeing* get_char_linear(const TBeing* ch, char* arg, int* rf, dirTypeT* df) {
   else if (Weather::getWeather(*ch->roomp) == Weather::SNOWY)
     max_range /= 4;
 
-  strcpy(tmpname, arg);
+  strncpy(tmpname, arg, sizeof(tmpname) - 1);
+  tmpname[sizeof(tmpname) - 1] = '\0';
   tmp = tmpname;
   if (!(n = get_number(&tmp)))
     return NULL;

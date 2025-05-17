@@ -557,7 +557,7 @@ void TPerson::doSet(const char* argument) {
       argument = one_argument(argument, buf2, cElements(buf2));
       buf = buf2;
       sprintf(buf2, " %s", buf.c_str());
-      strcat(parmstr, buf2);
+      strncat(parmstr, buf2, sizeof(parmstr) - strlen(parmstr) - 1);
       //     vlogf(LOG_MISC,format("parmstr is %s, argument is %s, buf is %s,
       //     parm2 is %s, buf2 is %s") %  parmstr % argument % buf % parm2 %
       //     buf2);

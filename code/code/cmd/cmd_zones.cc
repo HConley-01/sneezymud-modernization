@@ -80,17 +80,17 @@ void TBeing::doZonesSingle(sstring tStString) {
               strcpy(tStats, "This zone is ");
 
               if (iRCount > 500)
-                strcat(tStats, "Huge!");
+                strncat(tStats, "Huge!", sizeof(tStats) - strlen(tStats) - 1);
               else if (iRCount > 200)
-                strcat(tStats, "Large!");
+                strncat(tStats, "Large!", sizeof(tStats) - strlen(tStats) - 1);
               else if (iRCount > 100)
-                strcat(tStats, "a good size.");
+                strncat(tStats, "a good size.", sizeof(tStats) - strlen(tStats) - 1);
               else if (iRCount > 50)
-                strcat(tStats, "medium sized.");
+                strncat(tStats, "medium sized.", sizeof(tStats) - strlen(tStats) - 1);
               else
-                strcat(tStats, "small, but has a down home feeling...");
+                strncat(tStats, "small, but has a down home feeling...", sizeof(tStats) - strlen(tStats) - 1);
 
-              strcat(tStats, "\n\r");
+              strncat(tStats, "\n\r", sizeof(tStats) - strlen(tStats) - 1);
       */
       // }
 

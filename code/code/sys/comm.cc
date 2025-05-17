@@ -603,7 +603,7 @@ void colorAct(colorTypeT colorLevel, const sstring& str, bool hide,
       snprintf(buf, cElements(buf), "%s", str.c_str());
     } else {
       snprintf(buf, cElements(buf), "%s",
-        colorString(dynamic_cast<const TBeing*>(to), to->desc, str.c_str(),
+        colorString(dynamic_cast<const TBeing*>(to), to->desc, str,
           NULL, COLOR_NONE, TRUE)
           .c_str());
     }
@@ -1133,7 +1133,7 @@ void Descriptor::updateScreenVt100(unsigned int update) {
         ratio = fname(f->name).length() + strlen(prompt_mesg[ratio]);
 
         while (ratio < 25) {
-          strncat(buf, " ", cElements(buf) - 1);
+          strncat(buf, " ", cElements(buf) - strlen(buf) - 1);
           ratio++;
         }
       }
@@ -1241,7 +1241,6 @@ void Descriptor::updateScreenVt100(unsigned int update) {
         snprintf(buf + strlen(buf), cElements(buf) - strlen(buf), VT_CURSPOS,
           ch->getScreen() - 1, 1);
         strncat(buf + strlen(buf), StTemp, cElements(buf) - strlen(buf));
-
         last.fighting = TRUE;
       }
     } else {
@@ -1300,7 +1299,6 @@ void Descriptor::updateScreenVt100(unsigned int update) {
           snprintf(buf + strlen(buf), cElements(buf) - strlen(buf), VT_CURSPOS,
             ch->getScreen() - 1, 55);
           strncat(buf + strlen(buf), StTemp, cElements(buf) - strlen(buf));
-
           last.fighting = TRUE;
         } else {
           snprintf(buf + strlen(buf), cElements(buf) - strlen(buf), VT_CURSPOS,
@@ -1340,11 +1338,10 @@ void Descriptor::updateScreenVt100(unsigned int update) {
           tptr->tm_hour -= 24;
 
         snprintf(buf + strlen(buf), cElements(buf) - strlen(buf), VT_CURSPOS,
-          ch->getScreen(), 15);
+          ch->getScreen(), 62);
         snprintf(buf + strlen(buf), cElements(buf) - strlen(buf),
-          "   %2d:%02d %2s   ",
-          (!(tptr->tm_hour % 12) ? 12 : tptr->tm_hour % 12), tptr->tm_min,
-          (tptr->tm_hour >= 12) ? "PM" : "AM");
+          "%2d:%02d %2s", (!(tptr->tm_hour % 12) ? 12 : tptr->tm_hour % 12),
+          tptr->tm_min, (tptr->tm_hour >= 12) ? "PM" : "AM");
       }
     }
 

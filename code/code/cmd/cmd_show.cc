@@ -40,20 +40,20 @@ static void print_room(int rnum, TRoom* rp, sstring& sb,
     TerrainInfo[rp->getSectorType()]->name,
     (!rp->name.empty() ? rp->name.c_str() : "Empty"));
   if (rp->getRoomFlags()) {
-    strcat(buf, "    [");
+    strncat(buf, "    [", sizeof(buf) - strlen(buf) - 1);
 
     dink = 0;
     for (bits = rp->getRoomFlags(), scan = 0; bits; scan++) {
       if (bits & (1 << scan)) {
         if (dink)
-          strcat(buf, " ");
+          strncat(buf, " ", sizeof(buf) - strlen(buf) - 1);
         if (scan < MAX_ROOM_BITS)
-          strcat(buf, room_bits[scan]);
+          strncat(buf, room_bits[scan], sizeof(buf) - strlen(buf) - 1);
         dink = 1;
         bits ^= (1 << scan);
       }
     }
-    strcat(buf, "]\n\r");
+    strncat(buf, "]\n\r", sizeof(buf) - strlen(buf) - 1);
   }
 
   sb += buf;
@@ -1076,7 +1076,7 @@ void TPerson::doShow(const sstring& argument) {
           if (colorString(this, desc, tBuffer, NULL, COLOR_NONE, TRUE)
                 .length() > 40) {
             tBuffer[38] = '\0';
-            strcat(tBuffer, "...<z>");
+            strncat(tBuffer, "...<z>", sizeof(tBuffer) - strlen(tBuffer) - 1);
           }
 
           // This corrects the 'have color code will misalign' problem.

@@ -291,22 +291,34 @@ void TMonster::createWealth(void) {
     calculateGoldFromConstant();  // can reset money
   }
 
-  // execute our post-load commands
-  if (Config::LoadOnDeath() && loadCom.size() > 0) {
-    bool last_cmd = true;
-    bool objload = false;
-    bool mobload = true;
-    TObj* obj = NULL;
-    TMonster* myself = this;
-    TRoom* birthRoom = real_roomp(brtRoom);
+// execute our post-load commands
+if (Config::LoadOnDeath() && loadCom.size() > 0) {
+  bool last_cmd = true;
+  bool objload = false;
+  bool mobload = true;
+  TObj* obj = NULL;
+  TMonster* myself = this;
+  TRoom* birthRoom = real_roomp(brtRoom);
 
-    zoneData* zone = birthRoom ? birthRoom->getZone() : NULL;
+  zoneData* zone = birthRoom ? birthRoom->getZone() : NULL;
 
-    for (unsigned int iLoad = 0; zone && iLoad < loadCom.size(); iLoad++)
-      if (!loadCom[iLoad].execute(*zone, resetFlagNone, mobload, myself,
-            objload, obj, last_cmd))
-        break;
+  for (unsigned int iLoad = 0; zone && iLoad < loadCom.size(); iLoad++) {
+    // Skip commands that depend on a failed previous command
+    if (!last_cmd && loadCom[iLoad].if_flag)
+      continue;
+
+    // For '?' commands, use the stored result instead of re-rolling
+    if (loadCom[iLoad].command == '?') {
+      last_cmd = loadCom[iLoad].chanceSucceeded;
+      continue;
+    }
+
+    // Execute the command
+    if (!loadCom[iLoad].execute(*zone, resetFlagNone, mobload, myself,
+          objload, obj, last_cmd))
+      break;
   }
+}
 
   // skip special loads here - if we skip too early then zonefile loads are
   // affected

@@ -124,6 +124,7 @@ class resetCom {
     int arg4;
     char character;
     int cmd_no;
+    bool chanceSucceeded;
 
   public:
     resetCom();

@@ -57,7 +57,7 @@ void TBook::lookAtObj(TBeing* ch, const char* arg, showModeT) const {
       sstring buf2;
       if (file_to_sstring(the_filebuf, buf2)) {
         // found ansi section
-        strcat(buf, buf2.c_str());
+        strncat(buf, buf2.c_str(), sizeof(buf) - strlen(buf) - 1);
         sprintf(buf + strlen(buf), "\n\rEnd of section %d.\n\r", section);
         ch->desc->page_string(buf);
         return;
@@ -66,7 +66,7 @@ void TBook::lookAtObj(TBeing* ch, const char* arg, showModeT) const {
     sprintf(the_filebuf, "objdata/books/%d.%d", vnum, section);
     sstring buf2;
     if (file_to_sstring(the_filebuf, buf2)) {
-      strcat(buf, buf2.c_str());
+      strncat(buf, buf2.c_str(), sizeof(buf) - strlen(buf) - 1);
       sprintf(buf + strlen(buf), "\n\rEnd of section %d.\n\r", section);
       if (!ch->desc->m_bIsClient)
         ch->desc->page_string(buf);
@@ -90,8 +90,8 @@ void TBook::lookAtObj(TBeing* ch, const char* arg, showModeT) const {
       sstring buf2;
       if (file_to_sstring(the_filebuf, buf2)) {
         // found ansi section
-        strcat(buf, buf2.c_str());
-        strcat(buf, "\n\r");
+        strncat(buf, buf2.c_str(), sizeof(buf) - strlen(buf) - 1);
+        strncat(buf, "\n\r", sizeof(buf) - strlen(buf) - 1);
         ch->desc->page_string(buf);
         return;
       }
@@ -99,8 +99,8 @@ void TBook::lookAtObj(TBeing* ch, const char* arg, showModeT) const {
     sprintf(the_filebuf, "objdata/books/%d", vnum);
     sstring buf2;
     if (file_to_sstring(the_filebuf, buf2)) {
-      strcat(buf, buf2.c_str());
-      strcat(buf, "\n\r");
+      strncat(buf, buf2.c_str(), sizeof(buf) - strlen(buf) - 1);
+      strncat(buf, "\n\r", sizeof(buf) - strlen(buf) - 1);
       if (!ch->desc->m_bIsClient)
         ch->desc->page_string(buf);
       else {

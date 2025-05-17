@@ -3233,10 +3233,12 @@ void runResetCmdQMark(zoneData&, resetCom& rs, resetFlag flags, bool& mobload,
         : static_cast<int>(
             min(max(rs.arg1 * tweakInfo[TWEAK_LOADRATE]->current, 0.0), 100.0));
 
+    // Store the result of the chance check
+    rs.chanceSucceeded = chance >= 99 || roll <= chance;
     // This reference tells the next command whether the immediately preceeding
     // ? command passed its roll or not, and therefore whether or not the next
     // command should execute.
-    last_cmd = chance >= 99 || roll <= chance;
+    last_cmd = rs.chanceSucceeded;
 
     if (!last_cmd) {
       if (rs.character == 'M') {
@@ -3484,7 +3486,6 @@ void runResetCmdX(zoneData& zone, resetCom& rs, resetFlag, bool&, TMonster*&,
   }
 }
 
-// Z <if flag> <set num> <perc chance>
 void runResetCmdZ(zoneData& zone, resetCom& rs, resetFlag flags, bool& mobload,
   TMonster*& mob, bool&, TObj*&, bool&) {
   if (IS_SET(flags, resetFlagFindLoadPotential)) {
@@ -3498,15 +3499,22 @@ void runResetCmdZ(zoneData& zone, resetCom& rs, resetFlag flags, bool& mobload,
     const auto chance = static_cast<int>(
       min(max(rs.arg2 * tweakInfo[TWEAK_LOADRATE]->current, 0.0), 100.0));
 
-    for (wearSlotT i = MIN_WEAR; i < MAX_WEAR; i++)
-      if (zone.armorSets.getArmor(rs.arg1, i) != 0)
-        loadsetCheck(mob, zone.armorSets.getArmor(rs.arg1, i), chance, i,
-          "(null... for now)");
+    // Only load the equipment if the percentage chance succeeds
+    if (percentChance(chance)) {
+      for (wearSlotT i = MIN_WEAR; i < MAX_WEAR; i++)
+        if (zone.armorSets.getArmor(rs.arg1, i) != 0)
+          loadsetCheck(mob, zone.armorSets.getArmor(rs.arg1, i), 100, i,
+            "(null... for now)");
+    }
   }
 }
 
 void runResetCmdY(zoneData&, resetCom& rs, resetFlag flags, bool& mobload,
   TMonster*& mob, bool&, TObj*&, bool& last_cmd) {
+  // Skip if this command depends on a previous command that failed
+  if (rs.if_flag && !last_cmd)
+    return;
+
   const auto chance = static_cast<int>(
     min(max(rs.arg2 * tweakInfo[TWEAK_LOADRATE]->current, 0.0), 100.0));
 
@@ -3518,6 +3526,7 @@ void runResetCmdY(zoneData&, resetCom& rs, resetFlag flags, bool& mobload,
   if (!mob || !mobload)
     return;
 
+  // Load the equipment with the original chance, keeping individual piece checks
   mob->loadSetEquipment(rs.arg1, nullptr, chance);
   last_cmd = true;
 }
@@ -4040,7 +4049,8 @@ resetCom::resetCom() :
   arg2(0),
   arg3(0),
   arg4(0),
-  character('\0') {
+  character('\0'),
+  chanceSucceeded(false) {
   static bool v_isInitialized = false;
   if (!v_isInitialized) {
     memset(executeMethods, 0, sizeof(executeMethods));
@@ -4078,7 +4088,8 @@ resetCom::resetCom(const resetCom& t) :
   arg3(t.arg3),
   arg4(t.arg4),
   character(t.character),
-  cmd_no(0) {}
+  cmd_no(0),
+  chanceSucceeded(t.chanceSucceeded) {}
 
 resetCom::~resetCom() {}
 
@@ -4093,8 +4104,8 @@ resetCom& resetCom::operator=(const resetCom& t) {
   arg2 = t.arg2;
   arg3 = t.arg3;
   arg4 = t.arg4;
-  arg1 = t.arg1;
   cmd_no = t.cmd_no;
+  chanceSucceeded = t.chanceSucceeded;  // Add this line
 
   return *this;
 }

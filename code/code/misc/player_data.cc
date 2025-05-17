@@ -373,9 +373,10 @@ void TPerson::storeToSt(charFile* st) {
 
   st->flags = 0;
 
-  if (desc && desc->account)
-    strcpy(st->aname, desc->account->name.c_str());
-  else {
+  if (desc && desc->account) {
+    strncpy(st->aname, desc->account->name.c_str(), sizeof(st->aname) - 1);
+    st->aname[sizeof(st->aname) - 1] = '\0';
+  } else {
     vlogf(LOG_BUG, format("storeToSt for %s with no account info") % getName());
   }
 
@@ -549,19 +550,23 @@ void TPerson::storeToSt(charFile* st) {
 
 #if 0
   if (title)
-    strcpy(st->title, title);
+    strncpy(st->title, title, sizeof(st->title) - 1);
+    st->title[sizeof(st->title) - 1] = '\0';
   else
     *st->title = '\0';
 #endif
 
-  strcpy(st->lastHost, lastHost);
+  strncpy(st->lastHost, lastHost, sizeof(st->lastHost) - 1);
+  st->lastHost[sizeof(st->lastHost) - 1] = '\0';
 
-  if (!getDescr().empty())
-    strcpy(st->description, getDescr().c_str());
-  else
+  if (!getDescr().empty()) {
+    strncpy(st->description, getDescr().c_str(), sizeof(st->description) - 1);
+    st->description[sizeof(st->description) - 1] = '\0';
+  } else
     *st->description = '\0';
 
-  strcpy(st->name, name.c_str());
+  strncpy(st->name, name.c_str(), sizeof(st->name) - 1);
+  st->name[sizeof(st->name) - 1] = '\0';
 
   condTypeT ic;
   for (ic = MIN_COND; ic < MAX_COND_TYPE; ++ic)
@@ -723,7 +728,8 @@ void TPerson::loadFromSt(charFile* st) {
   player.time->logon = time(0);
   player.time->last_logon = st->last_logon;
 
-  strcpy(lastHost, st->lastHost);
+  strncpy(lastHost, st->lastHost, sizeof(lastHost) - 1);
+  lastHost[sizeof(lastHost) - 1] = '\0';
 
   setWeight(st->weight);
   height = st->height;
@@ -798,17 +804,28 @@ void TPerson::loadFromSt(charFile* st) {
   if (db.fetchRow()) {
     desc->prompt_d.type = convertTo<int>(db["p_type"]);
 
-    strcpy(desc->prompt_d.hpColor, db["hp"].c_str());
-    strcpy(desc->prompt_d.manaColor, db["mana"].c_str());
-    strcpy(desc->prompt_d.moveColor, db["move"].c_str());
-    strcpy(desc->prompt_d.moneyColor, db["money"].c_str());
-    strcpy(desc->prompt_d.expColor, db["exp"].c_str());
-    strcpy(desc->prompt_d.roomColor, db["room"].c_str());
-    strcpy(desc->prompt_d.oppColor, db["opp"].c_str());
-    strcpy(desc->prompt_d.tankColor, db["tank"].c_str());
-    strcpy(desc->prompt_d.pietyColor, db["piety"].c_str());
-    strcpy(desc->prompt_d.lifeforceColor, db["lifeforce"].c_str());
-    strcpy(desc->prompt_d.timeColor, db["time"].c_str());
+    strncpy(desc->prompt_d.hpColor, db["hp"].c_str(), sizeof(desc->prompt_d.hpColor) - 1);
+    desc->prompt_d.hpColor[sizeof(desc->prompt_d.hpColor) - 1] = '\0';
+    strncpy(desc->prompt_d.manaColor, db["mana"].c_str(), sizeof(desc->prompt_d.manaColor) - 1);
+    desc->prompt_d.manaColor[sizeof(desc->prompt_d.manaColor) - 1] = '\0';
+    strncpy(desc->prompt_d.moveColor, db["move"].c_str(), sizeof(desc->prompt_d.moveColor) - 1);
+    desc->prompt_d.moveColor[sizeof(desc->prompt_d.moveColor) - 1] = '\0';
+    strncpy(desc->prompt_d.moneyColor, db["money"].c_str(), sizeof(desc->prompt_d.moneyColor) - 1);
+    desc->prompt_d.moneyColor[sizeof(desc->prompt_d.moneyColor) - 1] = '\0';
+    strncpy(desc->prompt_d.expColor, db["exp"].c_str(), sizeof(desc->prompt_d.expColor) - 1);
+    desc->prompt_d.expColor[sizeof(desc->prompt_d.expColor) - 1] = '\0';
+    strncpy(desc->prompt_d.roomColor, db["room"].c_str(), sizeof(desc->prompt_d.roomColor) - 1);
+    desc->prompt_d.roomColor[sizeof(desc->prompt_d.roomColor) - 1] = '\0';
+    strncpy(desc->prompt_d.oppColor, db["opp"].c_str(), sizeof(desc->prompt_d.oppColor) - 1);
+    desc->prompt_d.oppColor[sizeof(desc->prompt_d.oppColor) - 1] = '\0';
+    strncpy(desc->prompt_d.tankColor, db["tank"].c_str(), sizeof(desc->prompt_d.tankColor) - 1);
+    desc->prompt_d.tankColor[sizeof(desc->prompt_d.tankColor) - 1] = '\0';
+    strncpy(desc->prompt_d.pietyColor, db["piety"].c_str(), sizeof(desc->prompt_d.pietyColor) - 1);
+    desc->prompt_d.pietyColor[sizeof(desc->prompt_d.pietyColor) - 1] = '\0';
+    strncpy(desc->prompt_d.lifeforceColor, db["lifeforce"].c_str(), sizeof(desc->prompt_d.lifeforceColor) - 1);
+    desc->prompt_d.lifeforceColor[sizeof(desc->prompt_d.lifeforceColor) - 1] = '\0';
+    strncpy(desc->prompt_d.timeColor, db["time"].c_str(), sizeof(desc->prompt_d.timeColor) - 1);
+    desc->prompt_d.timeColor[sizeof(desc->prompt_d.timeColor) - 1] = '\0';
   } else {
     db.query(
       "insert into playerprompt (player_id, p_type, hp, mana, move, money, "

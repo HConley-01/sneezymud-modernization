@@ -545,7 +545,8 @@ void TBeing::doInsult(const char* argument) {
   char arg[MAX_INPUT_LENGTH];
   TBeing* victim;
 
-  strcpy(arg, argument);
+  strncpy(arg, argument, sizeof(arg) - 1);
+  arg[sizeof(arg) - 1] = '\0';
 
   if (*arg) {
     if (!(victim = get_char_room_vis(this, arg)))
@@ -597,7 +598,8 @@ void TBeing::doScratch(const char* argument) {
   if (in_room < 0)
     return;
 
-  strcpy(arg, argument);
+  strncpy(arg, argument, sizeof(arg) - 1);
+  arg[sizeof(arg) - 1] = '\0';
 
   if (!strcasecmp(arg, "leg")) {
     act("$n vigorously scratches $s leg!", TRUE, this, 0, 0, TO_ROOM);

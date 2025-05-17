@@ -7,6 +7,7 @@
 //////////////////////////////////////////////////////////////////////////
 
 #include <stdio.h>
+#include <random>
 
 #include "log.h"
 #include "extern.h"
@@ -113,11 +114,13 @@ int TMonster::mobVnum() const {
 }
 
 // creates a random number in interval [from;to]
+// SAFETY & EFFICIENCY: Modern, thread-safe, high-quality random number generator.
+// Uses thread-local Mersenne Twister for future-proofing and uniform distribution.
+// Returns a random integer in [from, to].
 int number(int from, int to) {
-  if (to - from + 1)
-    return ((rand() % (to - from + 1)) + from);
-  else
-    return (from);
+  if (from > to) return from; // Sanity check: invalid range
+  thread_local static std::mt19937 mt{std::random_device{}()};
+  return std::uniform_int_distribution<int>(from, to)(mt);
 }
 
 // simulates dice roll
@@ -1561,7 +1564,6 @@ void TMonster::addToWait(int amt) {
   // thus looking like no lag at all
   // lets get around this by just adding 1 extra round of lag
   // yeah, this messes things up for non combat generated lag, but oh well
-  // obviously, this is mob only due to way we handle wait differently
   // - Batopr 2-6-97
 
   // Cos- 7/98-- needed for polymorph type spells

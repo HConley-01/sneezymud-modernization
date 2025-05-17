@@ -24,7 +24,7 @@ bool Config::auto_deletion;
 bool Config::rent_only_deletion;
 bool Config::rent_tax;
 bool Config::nuke_inactive_mobs;
-bool Config::load_on_death;
+bool Config::load_on_death = false;
 bool Config::throw_format_exceptions;
 bool Config::no_specials;
 bool Config::b_trimmed;

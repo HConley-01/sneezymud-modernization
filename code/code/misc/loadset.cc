@@ -9,7 +9,7 @@
 #include <stdio.h>
 
 #include <cmath>
-
+#include "room.h"
 #include "being.h"
 #include "configuration.h"
 #include "monster.h"
@@ -68,6 +68,10 @@ wearSlotT getSlotFromLST(loadSetTypeT tPiece, TBeing* ch, bool isFirst) {
 bool loadSetClass::suitLoad(const char* argument, TBeing* ch,
   loadSetTypeT tPiece, int tChance, int sCount, bool findLoadPotential) {
   // soft 101 -1
+
+  // Explicitly initialize tChance and sCount to safe values if not provided
+  if (tChance < 0 || tChance > 100) tChance = 0;
+  if (sCount < 0) sCount = 0;
 
   if (sCount <= 0 && (!argument || !*argument))
     return false;
@@ -175,7 +179,12 @@ bool loadsetCheck(TBeing* ch, int vnum, int chance, wearSlotT slot,
   const auto realChance = static_cast<int>(
     min(max(chance * tweakInfo[TWEAK_LOADRATE]->current, 0.0), 100.0));
 
-  if (!percentChance(realChance))
+  // Debug logging for load chance
+  printf("DEBUG: loadsetCheck incoming chance=%d, tweak=%.3f, realChance=%d\n", chance, tweakInfo[TWEAK_LOADRATE]->current, realChance);
+
+  bool passed = percentChance(realChance);
+  vlogf(LOG_BUG, format("loadsetCheck: vnum=%d slot=%s percentChance result=%s") % vnum % slotname % (passed ? "PASS" : "FAIL"));
+  if (!passed)
     return false;
 
   TObj* obj = isImmLoad || isPropLoad ? read_object(index, REAL)
@@ -233,6 +242,9 @@ void TBeing::loadSetEquipment(int num, char* arg, int tChance,
   sstring StString("");
   int tCount = 0;
 
+  // Explicitly initialize tChance to a safe value if not provided
+  if (tChance < 0 || tChance > 100) tChance = 0;
+
   if (num < 0 && (!arg || !*arg) && tChance != 101)
     return;
 
@@ -264,7 +276,7 @@ void TBeing::loadSetEquipment(int num, char* arg, int tChance,
           StString += "Illegal part.  Valids are:\n\r";
 
           for (int indexPart = 0; indexPart < LST_MAX; indexPart++) {
-            sprintf(dString, "    %s\n\r", suitPieceNames[indexPart]);
+            snprintf(dString, sizeof(dString), "    %s\n\r", suitPieceNames[indexPart]);
             StString += dString;
           }
 
@@ -325,20 +337,12 @@ void TBeing::loadSetEquipment(int num, char* arg, int tChance,
                 break;
               }
 
-            if (!hasMatch)
-              for (int classIndex = MIN_CLASS_IND; classIndex < MAX_CLASSES;
-                   classIndex++)
-                if (is_abbrev(tArg, classInfo[classIndex].name.c_str())) {
-                  tClass =
-                    ((classInfo[classIndex].name.cap().c_str()[0] == *tArg)
-                        ? (classIndex | (1 << 31))
-                        : classIndex);
-                  hasMatch = true;
-                  break;
-                }
-
-            if (!hasMatch && !is_abbrev(tArg, "information"))
-              strcpy(tSuit, tArg);
+            if (!hasMatch) {
+              if (!is_abbrev(tArg, "information")) {
+                strncpy(tSuit, tArg, sizeof(tSuit) - 1);
+                tSuit[sizeof(tSuit) - 1] = '\0';
+              }
+            }
           }
 
           if (!*cArg)
@@ -374,13 +378,13 @@ void TBeing::loadSetEquipment(int num, char* arg, int tChance,
       }
 
       if (tLevelMin > -1) {
-        sprintf(tString, "[%sLevel:%6.2f] ", (tLevelMax > -1 ? "Min-" : ""),
+        snprintf(tString, sizeof(tString), "[%sLevel:%6.2f] ", (tLevelMax > -1 ? "Min-" : ""),
           tLevelMin);
         StString += tString;
       }
 
       if (tLevelMax > -1) {
-        sprintf(tString, "[Max-Level:%6.2f] ", tLevelMax);
+        snprintf(tString, sizeof(tString), "[Max-Level:%6.2f] ", tLevelMax);
         StString += tString;
       }
 
@@ -415,7 +419,7 @@ void TBeing::loadSetEquipment(int num, char* arg, int tChance,
           tTotal = suitSets.suits[suitIndex].suitClassTotal;
           tPosbl = suitSets.suits[suitIndex].suitClassPossible;
 
-          sprintf(suitClasses, "[%c%c%c%c%c%c%c%c]",
+          snprintf(suitClasses, sizeof(suitClasses), "[%c%c%c%c%c%c%c%c]",
             (tTotal & CLASS_MAGE ? 'M' : (tPosbl & CLASS_MAGE ? 'm' : ' ')),
             (tTotal & CLASS_CLERIC ? 'C' : (tPosbl & CLASS_CLERIC ? 'c' : ' ')),
             (tTotal & CLASS_WARRIOR ? 'W'
@@ -433,7 +437,7 @@ void TBeing::loadSetEquipment(int num, char* arg, int tChance,
 
           tSuitShortMark = suitSets.suits[suitIndex].name;
           one_argument(tSuitShortMark, suitNameShort, cElements(suitNameShort));
-          sprintf(tString, "[%3d] %-15s   [%7s]   Lvl:%6.2f %s\n\r",
+          snprintf(tString, sizeof(tString), "[%3d] %-15s   [%7s]   Lvl:%6.2f %s\n\r",
             (suitIndex + 1), suitNameShort,
             suitTypeRaces[max(0,
               min(7, (int)suitSets.suits[suitIndex].suitRace))],
@@ -448,13 +452,13 @@ void TBeing::loadSetEquipment(int num, char* arg, int tChance,
           for (int pieceIndex = 0; pieceIndex < LST_MAX; pieceIndex++)
             if (!*tSuit && listMissing) {
               if (suitSets.suits[suitIndex].equipment[pieceIndex] == -1) {
-                sprintf(tString, "%s%s", (hasShownOne ? ", " : "      "),
+                snprintf(tString, sizeof(tString), "%s%s", (hasShownOne ? ", " : "      "),
                   suitPieceNames[pieceIndex]);
                 StString += tString;
                 hasShownOne = true;
               }
             } else {
-              sprintf(suitClasses, "[%c%c%c%c%c%c%c%c]",
+              snprintf(suitClasses, sizeof(suitClasses), "[%c%c%c%c%c%c%c%c]",
                 ((suitSets.suits[suitIndex].suitClass[pieceIndex] & CLASS_MAGE)
                     ? 'M'
                     : ' '),
@@ -466,7 +470,8 @@ void TBeing::loadSetEquipment(int num, char* arg, int tChance,
                    CLASS_WARRIOR)
                     ? 'W'
                     : ' '),
-                ((suitSets.suits[suitIndex].suitClass[pieceIndex] & CLASS_THIEF)
+                ((suitSets.suits[suitIndex].suitClass[pieceIndex] &
+                   CLASS_THIEF)
                     ? 'T'
                     : ' '),
                 ((suitSets.suits[suitIndex].suitClass[pieceIndex] &
@@ -477,7 +482,8 @@ void TBeing::loadSetEquipment(int num, char* arg, int tChance,
                    CLASS_DEIKHAN)
                     ? 'D'
                     : ' '),
-                ((suitSets.suits[suitIndex].suitClass[pieceIndex] & CLASS_MONK)
+                ((suitSets.suits[suitIndex].suitClass[pieceIndex] &
+                   CLASS_MONK)
                     ? 'K'
                     : ' '),
                 ((suitSets.suits[suitIndex].suitClass[pieceIndex] &
@@ -485,7 +491,7 @@ void TBeing::loadSetEquipment(int num, char* arg, int tChance,
                     ? 'R'
                     : ' '));
 
-              sprintf(tString, "  %-7s: %6d",
+              snprintf(tString, sizeof(tString), "  %-7s: %6d",
                 sstring(suitPieceNames[pieceIndex]).cap().c_str(),
                 suitSets.suits[suitIndex].equipment[pieceIndex]);
               StString += tString;
@@ -502,12 +508,12 @@ void TBeing::loadSetEquipment(int num, char* arg, int tChance,
                 else {
                   if ((tBCloth = dynamic_cast<TBaseClothing*>(tThing)) &&
                       tBCloth->armorLevel(ARMOR_LEV_REAL))
-                    sprintf(tString, " [R:%6.2f] %s [%s] [%s]\n\r",
+                    snprintf(tString, sizeof(tString), " [R:%6.2f] %s [%s] [%s]\n\r",
                       tBCloth->armorLevel(ARMOR_LEV_REAL), suitClasses,
                       tBCloth->getName().c_str(),
                       material_nums[tBCloth->getMaterial()].mat_name);
                   else
-                    sprintf(tString, " [R:      ] %s [%s] [%s]\n\r",
+                    snprintf(tString, sizeof(tString), " [R:      ] %s [%s] [%s]\n\r",
                       suitClasses, tThing->getName().c_str(),
                       material_nums[tThing->getMaterial()].mat_name);
 
@@ -533,7 +539,7 @@ void TBeing::loadSetEquipment(int num, char* arg, int tChance,
           float tUsedPerc =
             (((float)suitRaces[raceIndex] / (float)tCount) * 100);
 
-          sprintf(tString, " [%3.0f%%][%3d] %s\n\r", tUsedPerc,
+          snprintf(tString, sizeof(tString), " [%3.0f%%][%3d] %s\n\r", tUsedPerc,
             suitRaces[raceIndex],
             sstring(suitTypeRaces[raceIndex + 1]).cap().c_str());
 
@@ -541,7 +547,7 @@ void TBeing::loadSetEquipment(int num, char* arg, int tChance,
         }
 
       if (suitRaces[6] > 0) {
-        sprintf(tString, " Unknown[%d]\n\r", suitRaces[6]);
+        snprintf(tString, sizeof(tString), " Unknown[%d]\n\r", suitRaces[6]);
         StString += tString;
       } else
         StString += "\n\r";
@@ -563,7 +569,7 @@ void TBeing::loadSetEquipment(int num, char* arg, int tChance,
         tSuitShortMark = suitSets.suits[suitIndex].name;
         one_argument(tSuitShortMark, suitNameShort, cElements(suitNameShort));
 
-        sprintf(tString, "     [%3d] %-15s", ++tCount, suitNameShort);
+        snprintf(tString, sizeof(tString), "     [%3d] %-15s", ++tCount, suitNameShort);
         StString += tString;
 
         if ((tCount % 3) == 0)
@@ -580,7 +586,7 @@ void TBeing::loadSetEquipment(int num, char* arg, int tChance,
         StString += "\n\r";
         StString += "\n\r";
       }
-      sprintf(tString,
+      snprintf(tString, sizeof(tString),
         "Total Suits: Ogre[%d] Human[%d] Elf[%d] Dwarf[%d] Gnome[%d] "
         "Hobbit[%d]",
         suitRaces[5], suitRaces[0], suitRaces[1], suitRaces[2], suitRaces[4],
@@ -588,7 +594,7 @@ void TBeing::loadSetEquipment(int num, char* arg, int tChance,
       StString += tString;
 
       if (suitRaces[6] > 0) {
-        sprintf(tString, " **Unknown[%d]**\n\r", suitRaces[6]);
+        snprintf(tString, sizeof(tString), " **Unknown[%d]**\n\r", suitRaces[6]);
         StString += tString;
       } else
         StString += "\n\r";
@@ -636,7 +642,7 @@ void loadSetClass::SetupLoadSetSuits() {
   }
 
   while (1) {
-    if (!fgets(tString, 256, suitFile))
+    if (!fgets(tString, sizeof(tString), suitFile))
       vlogf(LOG_FILE, format("Unexpected read error on '%s'") % suitFilePath);
 
     if (tString[0] == ':')
@@ -655,9 +661,8 @@ void loadSetClass::SetupLoadSetSuits() {
         return;
       }
 
-      strcpy(tName, (tString + 1));
-      if (*tName)
-        tName[max(0, (int)(strlen(tName) - 1))] = '\0';
+      strncpy(tName, tString + 1, sizeof(tName) - 1);
+      tName[sizeof(tName) - 1] = '\0';
 
       if (strlen(tName) > 0) {
         hasSuit = true;
@@ -667,7 +672,8 @@ void loadSetClass::SetupLoadSetSuits() {
         tRace = RACE_NORACE;
       }
     } else if (tString[0] == '$') {
-      strcpy(tBuffer, (tString + 1));
+      strncpy(tBuffer, tString + 1, sizeof(tBuffer) - 1);
+      tBuffer[sizeof(tBuffer) - 1] = '\0';
 
       if (*tBuffer)
         tBuffer[max(0, (int)(strlen(tBuffer) - 1))] = '\0';
