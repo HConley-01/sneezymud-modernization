@@ -1889,6 +1889,9 @@ int spontaneousGeneration(TBeing* caster, TObj** obj, const char* name, int,
   if (caster->bSuccess(bKnown, SPELL_SPONTANEOUS_GENERATION)) {
     // Only deduct talens if the spell is successful and an item will be created
     caster->addToMoney(-SPONT_PRICE, GOLD_HOSPITAL);
+    caster->sendTo("You throw the talens into the air and they wink out of existence.\n\r");
+    act("$n tosses some money into the air and it magically disappears.", TRUE,
+      caster, 0, 0, TO_ROOM, ANSI_YELLOW);
     int i;
     int num;
     if (obj_index[numberx].value)
