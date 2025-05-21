@@ -1120,7 +1120,37 @@ int castIlluminate(TBeing* caster, TObj* obj) {
   level = caster->getSkillLevel(SPELL_ILLUMINATE);
 
   ret = illuminate(caster, obj, level, caster->getSkillValue(SPELL_ILLUMINATE));
-  return ret;
+
+  if (IS_SET(ret, SPELL_SUCCESS)) {
+    act("$n draws some elemental magic from the ether and guides it into $p.",
+      FALSE, caster, obj, NULL, TO_ROOM);
+    act("You draw some elemental magic from the ether and guide it into $p.",
+      FALSE, caster, obj, NULL, TO_CHAR);
+    act("$p begins to glow with a soft yellow light.", FALSE, caster, obj, NULL,
+      TO_CHAR);
+    act("$p begins to glow with a soft yellow light.", FALSE, caster, obj, NULL,
+      TO_ROOM);
+  }
+  if (IS_SET(ret, SPELL_CRIT_FAIL)) {
+    caster->spellMessUp(SPELL_ILLUMINATE);
+    act(
+      "$p flickers with a red light for a second, which then slowly fades "
+      "away.",
+      FALSE, caster, obj, NULL, TO_CHAR);
+    act(
+      "$p flickers with a red light for a second, which then slowly fades "
+      "away.",
+      FALSE, caster, obj, NULL, TO_ROOM);
+  }
+  if (IS_SET(ret, SPELL_CRIT_FAIL_2)) {
+    caster->spellMessUp(SPELL_ILLUMINATE);
+    act("$p flares up in an explosion of white light!", FALSE, caster, obj,
+      NULL, TO_CHAR);
+    act("$p flares up in an explosion of white light!", FALSE, caster, obj,
+      NULL, TO_ROOM);
+    return DELETE_ITEM;
+  }
+  return FALSE;
 }
 
 int detectMagic(TBeing* caster, TBeing* victim, int level, short bKnown) {
@@ -1624,9 +1654,13 @@ int castEnhanceWeapon(TBeing* caster, TObj* obj) {
   return FALSE;
 }
 
-bool alchemy_create_deny(int numberx) {
+// The is_spontaneous parameter allows certain item types (Holy Symbol, Raw Material, Raw Organic)
+// to be created by the spontaneous generation spell, but not by other spells (e.g., materialize).
+// If is_spontaneous is true, these types are allowed; otherwise, they are denied as before.
+bool alchemy_create_deny(int numberx, bool is_spontaneous /* = false */) {
   objIndexData oid = obj_index[numberx];
 
+  // General restrictions for all item creation spells
   if (oid.value < 0)
     return true;
   if (oid.max_exist < 1000)
@@ -1634,24 +1668,23 @@ bool alchemy_create_deny(int numberx) {
   if (oid.spec)
     return true;
 
-  // see if zone the obj comes from is disabled
+  // Check if the object's zone is disabled
   unsigned int zone;
-
   for (zone = 0; zone < zone_table.size(); zone++) {
     if (zone_table[zone].top > oid.virt) {
-      // the obj belongs to this zone
       if (zone_table[zone].enabled == FALSE)
         return true;
-
       break;
     }
   }
 
+  // Deny by item type, except allow Holy Symbol, Raw Material, and Raw Organic for spontaneous generation
   if (oid.itemtype == ITEM_WINDOW)
     return true;
   if (oid.itemtype == ITEM_MONEY)  // piles of coins
     return true;
-  if (oid.itemtype == ITEM_HOLY_SYM)
+  // Only deny Holy Symbol for non-spontaneous spells
+  if (!is_spontaneous && oid.itemtype == ITEM_HOLY_SYM)
     return true;
   if (oid.itemtype == ITEM_COMPONENT)
     return true;
@@ -1669,9 +1702,10 @@ bool alchemy_create_deny(int numberx) {
     return true;
   if (oid.itemtype == ITEM_TREASURE)
     return true;
-  if (oid.itemtype == ITEM_RAW_MATERIAL)
+  // Only deny Raw Material and Raw Organic for non-spontaneous spells
+  if (!is_spontaneous && oid.itemtype == ITEM_RAW_MATERIAL)
     return true;
-  if (oid.itemtype == ITEM_RAW_ORGANIC)
+  if (!is_spontaneous && oid.itemtype == ITEM_RAW_ORGANIC)
     return true;
   if (oid.itemtype == ITEM_FLAME)
     return true;
@@ -1691,6 +1725,7 @@ bool alchemy_create_deny(int numberx) {
     return true;
   if (!IS_SET(oid.where_worn, ITEM_WEAR_TAKE))
     return true;
+  // Deny by name patterns (applies to all spells)
   if (isname("belt monk", oid.name))
     return true;
   if (isname("sash monk", oid.name))
@@ -1706,17 +1741,8 @@ bool alchemy_create_deny(int numberx) {
   if (isname("muffs ear", oid.name))
     return true;
 
-  // the above checks remain as a safeguard against putting bad objects
-  // in this list
-  int allowed[] = {6, 9, 105, 106, 108, 321, 330, 410, 1012, 3090, 3091, 13841,
-    13860, 26686, 28917, 28918, 28919, 148, 318, -1};
-
-  for (int i = 0; allowed[i] != -1; ++i) {
-    if (allowed[i] == oid.virt)
-      return false;
-  }
-
-  return true;
+  // No allowed[] vnum list here: see materialize() for that logic.
+  return false;
 }
 
 int materialize(TBeing* caster, TObj** obj, int, const char* name,
@@ -1729,12 +1755,27 @@ int materialize(TBeing* caster, TObj** obj, int, const char* name,
     caster, 0, 0, TO_ROOM, ANSI_YELLOW);
   caster->addToMoney(-MATERIALIZE_PRICE, GOLD_HOSPITAL);
 
+  // ===================== MATERIALIZE SPELL LOGIC =====================
+  // Only allow specific vnums for materialize, in addition to general restrictions.
+  // This is enforced by the allowed[] vnum list below.
   for (numberx = 0; numberx < obj_index.size(); numberx++) {
     if (!isname(name, obj_index[numberx].name))
       continue;
     if (obj_index[numberx].value > MATERIALIZE_PRICE)
       continue;
-    if (alchemy_create_deny(numberx))
+    if (alchemy_create_deny(numberx, false))
+      continue;
+    // Only allow specific vnums for materialize
+    int allowed[] = {6, 9, 105, 106, 108, 321, 330, 410, 1012, 3090, 3091, 13841,
+      13860, 26686, 28917, 28918, 28919, 148, 318, -1};
+    bool found = false;
+    for (int i = 0; allowed[i] != -1; ++i) {
+      if (allowed[i] == obj_index[numberx].virt) {
+        found = true;
+        break;
+      }
+    }
+    if (!found)
       continue;
     break;
   }
@@ -1826,20 +1867,17 @@ int spontaneousGeneration(TBeing* caster, TObj** obj, const char* name, int,
   short bKnown) {
   unsigned int numberx;
 
-  caster->sendTo(
-    "You throw the talens into the air and they wink out of existence.\n\r");
-  act("$n tosses some money into the air and it magically disappears.", TRUE,
-    caster, 0, 0, TO_ROOM, ANSI_YELLOW);
-  caster->addToMoney(-SPONT_PRICE, GOLD_HOSPITAL);
-
+  // ===================== SPONTANEOUS GENERATION SPELL LOGIC =====================
+  // This spell now uses only the general restrictions from alchemy_create_deny.
+  // It does NOT check the allowed[] vnum list, so it is less restrictive than materialize.
+  // Pass is_spontaneous=true to allow Holy Symbol, Raw Material, and Raw Organic.
   for (numberx = 0; numberx < obj_index.size(); numberx++) {
     if (!isname(name, obj_index[numberx].name))
       continue;
     if (obj_index[numberx].value > SPONT_PRICE)
       continue;
-    if (alchemy_create_deny(numberx))
+    if (alchemy_create_deny(numberx, true))
       continue;
-
     break;
   }
   if (numberx >= obj_index.size()) {
@@ -1848,8 +1886,9 @@ int spontaneousGeneration(TBeing* caster, TObj** obj, const char* name, int,
     caster->nothingHappens(SILENT_YES);
     return SPELL_FAIL;
   }
-
   if (caster->bSuccess(bKnown, SPELL_SPONTANEOUS_GENERATION)) {
+    // Only deduct talens if the spell is successful and an item will be created
+    caster->addToMoney(-SPONT_PRICE, GOLD_HOSPITAL);
     int i;
     int num;
     if (obj_index[numberx].value)
@@ -1859,26 +1898,20 @@ int spontaneousGeneration(TBeing* caster, TObj** obj, const char* name, int,
     num = min(10, ::number(1, num));
     for (i = 0; i < num; i++) {
       *obj = read_object(numberx, REAL);
-
       (*obj)->remObjStat(ITEM_NEWBIE);
       (*obj)->setEmpty();
-
       if (!caster->heldInPrimHand())
         caster->equipChar(*obj, caster->getPrimaryHold(), SILENT_YES);
       else {
         *caster->roomp += **obj;
       }
     }
-
     act("In a flash of light, $p appears.", TRUE, caster, *obj, NULL, TO_ROOM);
     act("In a flash of light, $p appears.", TRUE, caster, *obj, NULL, TO_CHAR);
-
     TObj* obj2 = dynamic_cast<TObj*>(caster->heldInPrimHand());
     if (obj2 && obj2->objVnum() == (*obj)->objVnum()) {
-      act("You grab $p right out of the air.", TRUE, caster, *obj, NULL,
-        TO_CHAR);
+      act("You grab $p right out of the air.", TRUE, caster, *obj, NULL, TO_CHAR);
     }
-
     return SPELL_SUCCESS;
   } else {
     caster->nothingHappens();
