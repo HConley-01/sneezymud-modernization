@@ -570,6 +570,8 @@ If you're planning to view this in a specific environment, I can provide more ta
 
 ## Code Logic Analysis
 
+<img src="https://www.mermaidchart.com/raw/090f1e30-3281-4f32-8771-19c5bfd250d5?theme=light&version=v0.1&format=svg" style="zoom:100%;" />
+
 ### 1. Zone Reset Process
 
 When a zone resets, the `resetZone` function in `db.cc` processes each command in the zone file:
@@ -599,7 +601,7 @@ void zoneData::resetZone(bool bootTime, bool findLoadPotential) {
 }
 ```
 
-![]()
+
 
 The key decision point is whether to execute the command immediately or store it for later execution when the mob dies, which is determined by the `shouldStickToMob` function:
 
@@ -748,24 +750,13 @@ The `loadsetCheck` function applies the percentage check to each piece individua
 
 ## Key Differences and Issues
 
-1. Dependency on Previous Commands
-
-   :
-
+1. Dependency on Previous Commands:
    - Individual items: The 'E' command checks `if_flag` and `last_cmd` to determine if it should execute
    - Equipment sets: The 'Y' command does not check `if_flag` or `last_cmd`, so it always executes regardless of previous commands
-
-2. Percentage Check Application
-
-   :
-
+2. Percentage Check Application:
    - Individual items: The percentage check is applied once by the '?' command
    - Equipment sets: The percentage check is applied to each piece individually by `loadsetCheck`
-
-3. LoadOnDeath Behavior
-
-   :
-
+3. LoadOnDeath Behavior:
    - When LoadOnDeath is enabled, both individual items and equipment sets are stored in the mob's `loadCom` array
    - When LoadOnDeath is disabled, both are executed immediately, but equipment sets don't respect the `if_flag` and `last_cmd` variables
 

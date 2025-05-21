@@ -1065,7 +1065,7 @@ void TPerson::doShow(const sstring& argument) {
 
       for (int tObjectIndex = 0; tObjectIndex < (signed)obj_index.size();
            tObjectIndex++)
-        if (!alchemy_create_deny(tObjectIndex) &&
+        if (!alchemy_create_deny(tObjectIndex, false) &&
             obj_index[tObjectIndex].value <= maxCost &&
             obj_index[tObjectIndex].value > minCost &&
             (tStItemType.empty() ||

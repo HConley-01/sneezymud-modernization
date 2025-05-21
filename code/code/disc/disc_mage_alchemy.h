@@ -78,7 +78,8 @@ int castEnhanceWeapon(TBeing*, TObj*);
 int enhanceWeapon(TBeing*, TMagicItem*, TObj*);
 int enhanceWeapon(TBeing*, TObj*, int, short);
 
-extern bool alchemy_create_deny(int);
+// Updated to allow an optional is_spontaneous parameter for spontaneous generation
+extern bool alchemy_create_deny(int numberx, bool is_spontaneous);
 const int MATERIALIZE_PRICE = 100;
 int castMaterialize(TBeing*, const char*);
 int materialize(TBeing*, const char*);
